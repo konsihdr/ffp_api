@@ -10,5 +10,7 @@ COPY . .
 # Installiere die Abhängigkeiten
 RUN pip install --no-cache-dir -r requirements.txt
 
+EXPOSE 8000
+
 # Starte die Anwendung mit Gunicorn
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:8000", "wsgi:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "wsgi:app"]
