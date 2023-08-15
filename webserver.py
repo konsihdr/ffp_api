@@ -64,7 +64,7 @@ def get_next_event():
         return None
 
 # Definiere eine API-Routes
-@app.route('/all', methods=['GET'])
+@app.route('/api/all', methods=['GET'])
 def all_events():
     events = get_calendar_events()
 
@@ -82,7 +82,7 @@ def next_event():
     else:
         return jsonify({'error': 'Failed to fetch calendar events'})
     
-@app.route('/nj', methods=['GET'])
+@app.route('/api/nj', methods=['GET'])
 def next_youth_event():
     next_event = get_next_youth_training_event()
 
