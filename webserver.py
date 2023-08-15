@@ -73,7 +73,7 @@ def all_events():
     else:
         return jsonify({'error': 'Failed to fetch calendar events'})
 
-@app.route('/ne', methods=['GET'])
+@app.route('/api/ne', methods=['GET'])
 def next_event():
     next_event = get_next_event()
 
