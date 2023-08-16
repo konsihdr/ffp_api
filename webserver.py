@@ -1,10 +1,8 @@
-from flask import Flask, jsonify, request
-from functools import wraps
-import requests
+from datetime import datetime, timedelta, timezone
+
 import icalendar
-from io import BytesIO
-from datetime import datetime, timezone, timedelta
-import os
+import requests
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
