@@ -8,6 +8,7 @@ flask = "*"
 icalendar = "*"
 requests = "*"
 gunicorn = "*"
+flask-cors = "*"
 
 [dev-packages]
 isort = "*"
