@@ -3,8 +3,10 @@ from datetime import datetime, timedelta, timezone
 import icalendar
 import requests
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # URL des öffentlichen Google Kalenders im iCal-Format (ICS)
 CALENDAR_URL="https://calendar.google.com/calendar/ical/46h88cspd4jsh261dgggqgoevk%40group.calendar.google.com/public/basic.ics"
