@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-import icalendar
+from icalendar import Calendar
 import requests
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -16,7 +16,7 @@ def get_calendar_events():
     response = requests.get(CALENDAR_URL)
     if response.status_code == 200:
         ics_content = response.content
-        calendar = icalendar.Calendar.from_ical(ics_content)
+        calendar = Calendar.from_ical(ics_content)
 
         events = []
         for event in calendar.walk('vevent'):
