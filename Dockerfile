@@ -5,7 +5,9 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Kopiere die Abhängigkeiten in das Arbeitsverzeichnis
-COPY . .
+COPY webserver.py .
+COPY wsgi.py .
+COPY requirements.txt .
 
 # Installiere die Abhängigkeiten
 RUN pip install --no-cache-dir -r requirements.txt
