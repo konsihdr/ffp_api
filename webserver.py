@@ -90,6 +90,10 @@ def next_youth_event():
         return jsonify(next_event)
     else:
         return jsonify({'error': 'No upcoming youth events found'})
+    
+@app.route('/api/ping', methods=['GET'])
+def ping():
+    return "Pong", 200, {"Access-Control-Allow-Origin": "*"}
 
 if __name__ == '__main__':
     app.run(debug=True)
