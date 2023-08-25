@@ -4,16 +4,20 @@ from icalendar import Calendar
 import requests
 from flask import Flask, jsonify
 from flask_cors import CORS
+from requests_cache import CachedSession
 
 app = Flask(__name__)
 CORS(app)
+
+# CachedSession mit einer SQLite-Datenbank als Cache
+session = CachedSession('ffp_api', backend='sqlite', expire_after=24*60*60)  # Gültigkeitsdauer: 24 Stunden
 
 # URL des öffentlichen Google Kalenders im iCal-Format (ICS)
 CALENDAR_URL="https://calendar.google.com/calendar/ical/46h88cspd4jsh261dgggqgoevk%40group.calendar.google.com/public/basic.ics"
 
 # Funktion zum Abrufen und Verarbeiten der Ereignisse im ICS-Format
 def get_calendar_events():
-    response = requests.get(CALENDAR_URL)
+    response = session.get(CALENDAR_URL)
     if response.status_code == 200:
         ics_content = response.content
         calendar = Calendar.from_ical(ics_content)
