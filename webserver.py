@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 from icalendar import Calendar
 import requests
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from requests_cache import CachedSession
 
@@ -51,8 +51,8 @@ def get_next_youth_training_event():
     else:
         return None
     
-# Funktion zum Abrufen des nächsten Events
-def get_next_event():
+# Funktion zum Abrufen der nächsten Events basierend auf der Anzahl
+def get_next_events(c):
     events = get_calendar_events()
     if events is not None:
         germany_tz = timezone(timedelta(hours=2))  # UTC+2 für Deutschland
@@ -60,8 +60,8 @@ def get_next_event():
         next_events = [event for event in events]
 
         if next_events:
-            next_event = min(next_events, key=lambda event: datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) if datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) >= now else datetime.max.replace(tzinfo=germany_tz))
-            return next_event
+            sorted_events = sorted(next_events, key=lambda event: datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) if datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) >= now else datetime.max.replace(tzinfo=germany_tz))
+            return sorted_events[:c]
         else:
             return None
     else:
@@ -79,10 +79,11 @@ def all_events():
 
 @app.route('/api/ne', methods=['GET'])
 def next_event():
-    next_event = get_next_event()
+    count = int(request.args.get('c', 1))  # Standardwert: 1
+    next_events = get_next_events(count)
 
-    if next_event is not None:
-        return jsonify(next_event)
+    if next_events:
+        return jsonify(next_events)
     else:
         return jsonify({'error': 'Failed to fetch calendar events'})
     
