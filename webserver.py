@@ -82,7 +82,9 @@ def next_event():
     count = int(request.args.get('c', 1))  # Standardwert: 1
     next_events = get_next_events(count)
 
-    if next_events:
+    if len(next_events) == 1 :
+        return jsonify(next_events[0])
+    elif len(next_events) > 1:
         return jsonify(next_events)
     else:
         return jsonify({'error': 'Failed to fetch calendar events'})
