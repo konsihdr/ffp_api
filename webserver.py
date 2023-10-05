@@ -57,7 +57,8 @@ def get_next_events(c):
     if events is not None:
         germany_tz = timezone(timedelta(hours=2))  # UTC+2 für Deutschland
         now = datetime.now(germany_tz)
-        next_events = [event for event in events]
+        next_events = [event for event in events if datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) >= now]
+
 
         if next_events:
             sorted_events = sorted(next_events, key=lambda event: datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) if datetime.fromisoformat(event['start']).replace(tzinfo=germany_tz) >= now else datetime.max.replace(tzinfo=germany_tz))
