@@ -13,7 +13,7 @@ CORS(app)
 session = CachedSession('ffp_api', backend='sqlite', expire_after=24*60*60)  # Gültigkeitsdauer: 24 Stunden
 
 # URL des öffentlichen Google Kalenders im iCal-Format (ICS)
-CALENDAR_URL="https://calendar.google.com/calendar/ical/46h88cspd4jsh261dgggqgoevk%40group.calendar.google.com/public/basic.ics"
+CALENDAR_URL="https://calendar.google.com/calendar/ical/74ba620d6f97d3d076e54247195ee2b2c927e257967c3d71c735e40d95dd8359%40group.calendar.google.com/private-c7ea8ddcff03ae10cb2593e1820e4d55/basic.ics"
 
 # Funktion zum Abrufen und Verarbeiten der Ereignisse im ICS-Format
 def get_calendar_events():
