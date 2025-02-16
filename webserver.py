@@ -101,7 +101,7 @@ def next_youth_event():
     
 @app.route('/api/ping', methods=['GET'])
 def ping():
-    return "Pong", 200, {"Access-Control-Allow-Origin": "*"}
+    return jsonify({'msg': 'pong'})
 
 if __name__ == '__main__':
     app.run(debug=True)
