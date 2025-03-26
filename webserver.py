@@ -6,6 +6,9 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from requests_cache import CachedSession
 
+from pymongo import MongoClient
+import os 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -14,6 +17,9 @@ session = CachedSession('ffp_api', backend='sqlite', expire_after=24*60*60)  # G
 
 # URL des öffentlichen Google Kalenders im iCal-Format (ICS)
 CALENDAR_URL="https://calendar.google.com/calendar/ical/74ba620d6f97d3d076e54247195ee2b2c927e257967c3d71c735e40d95dd8359%40group.calendar.google.com/private-c7ea8ddcff03ae10cb2593e1820e4d55/basic.ics"
+
+# pymongo client setup
+client = MongoClient(f"mongodb+srv://{os.environ['MONGO_USR']}:{os.environ['MONGO_PW']}@cluster0.4bhjk.mongodb.net/")
 
 # Funktion zum Abrufen und Verarbeiten der Ereignisse im ICS-Format
 def get_calendar_events():
@@ -101,7 +107,33 @@ def next_youth_event():
     
 @app.route('/api/ping', methods=['GET'])
 def ping():
-    return "Pong", 200, {"Access-Control-Allow-Origin": "*"}
+    return jsonify({'msg': 'pong'})
+
+# API routes for posts
+@app.route('/api/posts/all', methods=['GET'])
+def all_posts():
+    db = client.ffp
+    collection = db.posts
+    try:
+        posts = collection.find({}, {'alt': 1, 'caption': 1, 'url': 1, '_id': 0, 'displayUrl': 1, 'timestamp': 1}).sort([('timestamp', -1)]).limit(10)
+        # Convert documents to list of dictionaries and exclude _id field
+        posts_list = [{k: v for k, v in post.items() if k != '_id'} for post in posts]
+        return jsonify(posts_list)
+    except:
+        return jsonify({'error': 'Failed to fetch posts'})
+
+@app.route('/api/posts/latest', methods=['GET'])
+def latest_posts():
+    db = client.ffp
+    collection = db.posts
+    try:
+        posts = collection.find({}, {'alt': 1, 'caption': 1, 'url': 1, '_id': 0, 'displayUrl': 1, 'timestamp': 1}).sort([('timestamp', -1)]).limit(1)
+        # Convert documents to list of dictionaries and exclude _id field
+        posts_list = [{k: v for k, v in post.items() if k != '_id'} for post in posts]
+        return jsonify(posts_list[0])
+    except:
+        return jsonify({'error': 'Failed to fetch posts'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
