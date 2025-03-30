@@ -115,7 +115,7 @@ def all_posts():
     db = client.ffp
     collection = db.posts
     try:
-        posts = collection.find({}, {'alt': 1, 'caption': 1, 'url': 1, '_id': 0, 'displayUrl': 1, 'timestamp': 1}).sort([('timestamp', -1)]).limit(10)
+        posts = collection.find({}, {'alt': 1, 'caption': 1, 'url': 1, '_id': 0, 'displayUrl': 1, 'timestamp': 1}).sort([('timestamp', -1)]).limit(12)
         # Convert documents to list of dictionaries and exclude _id field
         posts_list = [{k: v for k, v in post.items() if k != '_id'} for post in posts]
         return jsonify(posts_list)
